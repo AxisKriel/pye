@@ -21,6 +21,14 @@ echo "@reboot root /pye/tracking/energy.sh" | sudo tee /etc/cron.d/pye_tracking_
 echo "@reboot root /pye/tracking/power.sh" | sudo tee /etc/cron.d/pye_tracking_power > /dev/null
 
 # Reload crontab to apply changes
-sudo systemctl reload cron
+sudo systemctl restart cron
 
-echo "✅ ~ Installed tracking jobs for: 'cpu', 'mem', 'energy', 'power'!"
+# Start the tracking scripts immediately
+sudo nohup bash -c "/pye/tracking/cpu.sh" >/dev/null 2>&1 &
+sudo nohup bash -c "/pye/tracking/mem.sh" >/dev/null 2>&1 &
+sudo nohup bash -c "/pye/tracking/energy.sh" >/dev/null 2>&1 &
+sudo nohup bash -c "/pye/tracking/power.sh" >/dev/null 2>&1 &
+
+echo "✅ ~ Installed tracking jobs for: 'cpu', 'mem', 'energy', 'power'"
+echo "📂 ~ Tracking scripts are located in '/pye/tracking' & logs are in '/var/log/pye/tracking'"
+echo "🔄 ~ Cron jobs have been updated and are now active"
